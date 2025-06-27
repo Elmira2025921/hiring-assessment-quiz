@@ -1,7 +1,8 @@
+
 /**
  * ===================================
  * HIRING ASSESSMENT QUIZ JAVASCRIPT
- * HireVirtuals - Complete Script File
+ * HireVirtuals - Email-Only Version
  * ===================================
  */
 
@@ -21,18 +22,14 @@ const CONFIG = {
     totalQuestions: 8,
     maxScore: 32, // Maximum possible score
     analytics: {
-        enabled: true,
+        enabled: false, // Disabled for simplicity
         trackQuestionTime: true,
-        trackScrollDepth: true
+        trackScrollDepth: false // Disabled
     },
     integrations: {
-        goHighLevel: {
-            enabled: true,
-            webhookUrl: '', // Set this in integrations/gohighlevel.js
-        },
         email: {
             enabled: true,
-            provider: 'custom' // mailchimp, convertkit, custom
+            provider: 'formspree' // or custom
         }
     },
     ui: {
@@ -138,11 +135,6 @@ function setupEventListeners() {
         });
     }
     
-    // Track scroll depth for analytics
-    if (CONFIG.analytics.trackScrollDepth) {
-        setupScrollTracking();
-    }
-    
     // Auto-save progress
     if (CONFIG.ui.autoSaveProgress) {
         setInterval(saveProgress, 10000); // Save every 10 seconds
@@ -202,17 +194,6 @@ function selectOption(element, questionNum) {
         
         // Track analytics
         trackQuizEvent('question_answered', questionNum, answer);
-        
-        // Auto-advance for better UX (optional, with delay)
-        setTimeout(() => {
-            if (questionNum < CONFIG.totalQuestions) {
-                const nextButton = nextBtn;
-                if (nextButton && !nextButton.disabled) {
-                    // Optional: auto-advance after 1 second
-                    // nextQuestion();
-                }
-            }
-        }, 1000);
         
         console.log(`Question ${questionNum} answered:`, answers[questionNum]);
         
@@ -514,62 +495,72 @@ async function submitEmail() {
     submitBtn.classList.add('loading');
     
     try {
+        // Calculate current results
+        const results = calculateResults();
+        
         // Prepare submission data
         const submissionData = {
             email: email,
             score: totalScore,
+            maxScore: CONFIG.maxScore,
             percentage: Math.round((totalScore / CONFIG.maxScore) * 100),
             answers: answers,
             timeSpent: Date.now() - startTime,
             questionTimes: timeSpentPerQuestion,
-            userAgent: navigator.userAgent,
+            category: results.category,
             timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
             source: 'hiring_assessment_quiz',
             referrer: document.referrer || 'direct'
         };
         
-        // Submit to various integrations
-        const promises = [];
-        
-        // GoHighLevel Integration
-        if (CONFIG.integrations.goHighLevel.enabled && typeof submitToGoHighLevel === 'function') {
-            promises.push(submitToGoHighLevel(submissionData));
+        // Submit to email service
+        let emailSuccess = false;
+        if (typeof window.submitToEmailService === 'function') {
+            emailSuccess = await window.submitToEmailService(submissionData);
+        } else {
+            console.warn('Email service not configured');
+            emailSuccess = true; // Proceed with success message
         }
         
-        // Email Service Integration
-        if (CONFIG.integrations.email.enabled && typeof addToEmailList === 'function') {
-            promises.push(addToEmailList(submissionData));
-        }
-        
-        // Analytics tracking
+        // Track email capture
         trackEmailCapture(email, submissionData.percentage);
         
-        // Wait for all integrations to complete
-        const results = await Promise.allSettled(promises);
-        
-        // Check for any failures
-        const failures = results.filter(result => result.status === 'rejected');
-        if (failures.length > 0) {
-            console.warn('Some integrations failed:', failures);
+        if (emailSuccess) {
+            // Show success message
+            showSuccessMessage('Thank you! The Business Owner\'s Guide to Recruitment Services will be sent to ' + email + ' within 24 hours.');
+            
+            // Hide email form and show thank you
+            const emailForm = document.querySelector('.email-form');
+            emailForm.style.display = 'none';
+            
+            // Show thank you message
+            const thankYouDiv = document.createElement('div');
+            thankYouDiv.innerHTML = `
+                <div style="text-align: center; padding: 20px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; margin-top: 20px;">
+                    <h4 style="color: #10b981; margin-bottom: 10px;">🎉 Thank You!</h4>
+                    <p style="color: #059669; margin: 0;">Your guide will be sent to <strong>${email}</strong> within 24 hours.</p>
+                </div>
+            `;
+            emailForm.parentElement.appendChild(thankYouDiv);
+            
+            // Optional: Scroll to thank you message
+            thankYouDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+        } else {
+            showErrorMessage('There was an error submitting your email. Please try again or contact us directly.');
         }
-        
-        // Show success message
-        showSuccessMessage('Thank you! The Business Owner\'s Guide to Recruitment Services will be sent to ' + email + ' within 24 hours.');
-        
-        // Optional: Redirect to booking page after delay
-        setTimeout(() => {
-            // Uncomment to redirect to booking page
-            // window.open('https://link.hirevirtuals.com/widget/bookings/hire-virtuals', '_blank');
-        }, 3000);
         
     } catch (error) {
         console.error('Error submitting email:', error);
         showErrorMessage('There was an error submitting your email. Please try again.');
     } finally {
-        // Reset button state
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('loading');
+        // Reset button state (only if form is still visible)
+        if (submitBtn.style.display !== 'none') {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
+        }
     }
 }
 
@@ -582,6 +573,10 @@ function validateEmailInput(event) {
     
     // Remove any previous error styling
     input.classList.remove('error');
+    const existingError = input.parentElement.querySelector('.error-message');
+    if (existingError) {
+        existingError.remove();
+    }
     
     // Real-time validation feedback
     if (email.length > 0 && !isValidEmail(email)) {
@@ -598,114 +593,46 @@ function isValidEmail(email) {
 }
 
 // ===================================
-// ANALYTICS & TRACKING
+// SIMPLIFIED ANALYTICS & TRACKING
 // ===================================
 
 /**
  * Track page view
  */
 function trackPageView() {
-    if (CONFIG.analytics.enabled && typeof gtag === 'function') {
-        gtag('event', 'page_view', {
-            page_title: 'Hiring Assessment Quiz',
-            page_location: window.location.href
-        });
-    }
+    console.log('Page viewed:', window.location.href);
 }
 
 /**
  * Track quiz events
  */
 function trackQuizEvent(action, question_number, answer) {
-    if (CONFIG.analytics.enabled) {
-        // Google Analytics
-        if (typeof gtag === 'function') {
-            gtag('event', action, {
-                event_category: 'Quiz',
-                event_label: `Question ${question_number}`,
-                custom_parameter_1: answer
-            });
-        }
-        
-        // Custom analytics
-        if (typeof trackCustomEvent === 'function') {
-            trackCustomEvent('quiz', action, {
-                question: question_number,
-                answer: answer,
-                timestamp: new Date().toISOString()
-            });
-        }
-    }
+    console.log('Quiz Event:', action, 'Question:', question_number, 'Answer:', answer);
 }
 
 /**
  * Track question completion time
  */
 function trackQuestionTime(questionNumber, timeSpent) {
-    if (CONFIG.analytics.enabled && typeof gtag === 'function') {
-        gtag('event', 'timing_complete', {
-            name: `question_${questionNumber}`,
-            value: timeSpent
-        });
-    }
+    console.log(`Question ${questionNumber} completed in ${timeSpent}ms`);
 }
 
 /**
  * Track email capture
  */
 function trackEmailCapture(email, score) {
-    if (CONFIG.analytics.enabled && typeof gtag === 'function') {
-        gtag('event', 'generate_lead', {
-            event_category: 'Lead Generation',
-            event_label: 'Quiz Completion',
-            value: score
-        });
-    }
+    console.log('Email captured:', email, 'Score:', score + '%');
 }
 
 /**
  * Track quiz completion
  */
 function trackQuizCompletion(results, completionTime) {
-    if (CONFIG.analytics.enabled && typeof gtag === 'function') {
-        gtag('event', 'quiz_complete', {
-            event_category: 'Quiz',
-            event_label: results.category.type,
-            value: results.percentage,
-            custom_parameter_1: completionTime
-        });
-    }
-}
-
-/**
- * Setup scroll depth tracking
- */
-function setupScrollTracking() {
-    let maxScroll = 0;
-    const milestones = [25, 50, 75, 90];
-    const tracked = new Set();
-    
-    window.addEventListener('scroll', throttle(() => {
-        const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-        
-        if (scrollPercent > maxScroll) {
-            maxScroll = scrollPercent;
-            
-            milestones.forEach(milestone => {
-                if (scrollPercent >= milestone && !tracked.has(milestone)) {
-                    tracked.add(milestone);
-                    
-                    if (typeof gtag === 'function') {
-                        gtag('event', 'scroll', {
-                            event_category: 'Engagement',
-                            event_label: `${milestone}%`,
-                            value: milestone
-                        });
-                    }
-                }
-            });
-        }
-    }, 250));
+    console.log('Quiz completed:', {
+        category: results.category.type,
+        score: results.percentage + '%',
+        timeSpent: Math.round(completionTime / 1000) + ' seconds'
+    });
 }
 
 // ===================================
@@ -1035,6 +962,7 @@ function createMessageElement(message, type) {
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         transform: translateX(100%);
         transition: transform 0.3s ease;
+        max-width: 400px;
     `;
     
     if (type === 'error') {
@@ -1089,8 +1017,8 @@ window.HiringQuiz = {
     }
 };
 
-console.log('Hiring Assessment Quiz script loaded successfully');
+console.log('Hiring Assessment Quiz script loaded successfully (Email-only version)');
 
 // ===================================
 // END OF SCRIPT
-// =================================== 
+// ===================================
