@@ -1,7 +1,7 @@
 // Simple email collection using Formspree
 async function submitToEmailService(formData) {
-    // Replace YOUR_FORMSPREE_ENDPOINT with your actual endpoint
-    const formspreeEndpoint = 'https://formspree.io/f/YOUR_FORMSPREE_ENDPOINT';
+    // Your actual Formspree endpoint
+    const formspreeEndpoint = 'https://formspree.io/f/xpwrkdka';
     
     try {
         const response = await fetch(formspreeEndpoint, {
@@ -13,19 +13,37 @@ async function submitToEmailService(formData) {
                 email: formData.email,
                 subject: 'New Quiz Completion - Hiring Assessment',
                 message: `
-Quiz Results:
+HIRING ASSESSMENT QUIZ RESULTS
+
+Contact Information:
 - Email: ${formData.email}
-- Score: ${formData.score}/${formData.maxScore} (${formData.percentage}%)
+- Submission Date: ${new Date(formData.timestamp).toLocaleString()}
+
+Quiz Results:
+- Score: ${formData.score} out of ${formData.maxScore} points
+- Percentage: ${formData.percentage}%
 - Category: ${formData.category?.type || 'Unknown'}
 - Time Spent: ${Math.round(formData.timeSpent / 1000)} seconds
 
-Answers:
-${Object.entries(formData.answers).map(([q, a]) => 
-    `Question ${q}: ${a.text} (${a.answer})`
+Detailed Answers:
+${Object.entries(formData.answers).map(([questionNum, answer]) => 
+    `Question ${questionNum}: ${answer.text}`
 ).join('\n')}
 
-Timestamp: ${formData.timestamp}
-                `
+Recommendations Category: ${formData.category?.type}
+- ${formData.category?.title}
+- ${formData.category?.description}
+
+Technical Details:
+- Source: ${formData.source}
+- User Agent: ${formData.userAgent.substring(0, 50)}...
+- Referrer: ${formData.referrer}
+                `,
+                // Additional structured fields for better organization
+                quiz_score: formData.score,
+                quiz_percentage: formData.percentage,
+                quiz_category: formData.category?.type,
+                time_spent_seconds: Math.round(formData.timeSpent / 1000)
             })
         });
         
