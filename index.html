@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,24 +12,338 @@
     <meta property="og:title" content="Is Your Hiring Process Too Automated?">
     <meta property="og:description" content="Take this 2-minute quiz to discover if AI is costing you the perfect candidates">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://[YOUR-USERNAME].github.io/hiring-assessment-quiz/">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
+    <meta property="og:url" content="https://elmira2025921.github.io/hiring-assessment-quiz/">
     
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
     
-    <!-- Google Analytics (if you have it) -->
+    <!-- Google Analytics (replace GA_MEASUREMENT_ID with your actual ID when ready) -->
     <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script> -->
 </head>
 <body>
-    <!-- Quiz content will go here -->
-    <!-- Copy the body content from the artifact -->
-    
+    <div class="quiz-container">
+        <div class="quiz-card">
+            <div class="quiz-header">
+                <h1 class="quiz-title">Is Your Hiring Process Too Automated?</h1>
+                <p class="quiz-subtitle">Discover if AI and automation are costing you the perfect candidates</p>
+                <div class="quiz-stats">
+                    <div class="stat">
+                        <div class="stat-number">2 min</div>
+                        <div>to complete</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">8</div>
+                        <div>questions</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">Free</div>
+                        <div>comprehensive guide</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-content">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <!-- Question 1 -->
+                <div class="question-container active" data-question="1">
+                    <div class="question-number">Question 1 of 8</div>
+                    <h2 class="question-text">How do you currently find candidates for your team?</h2>
+                    <p class="question-description">This helps us understand your current recruitment approach</p>
+                    
+                    <div class="options">
+                        <div class="option" data-value="3" data-answer="job-posts">
+                            <div class="option-text">Post jobs on job boards and wait for applications</div>
+                            <div class="option-description">LinkedIn, Indeed, ZipRecruiter, etc.</div>
+                        </div>
+                        <div class="option" data-value="2" data-answer="agencies">
+                            <div class="option-text">Work with recruitment agencies who send candidates</div>
+                            <div class="option-description">Agencies handle the sourcing and initial screening</div>
+                        </div>
+                        <div class="option" data-value="1" data-answer="personal">
+                            <div class="option-text">Personal networking and referrals</div>
+                            <div class="option-description">Ask connections and employees for recommendations</div>
+                        </div>
+                        <div class="option" data-value="3" data-answer="platforms">
+                            <div class="option-text">Use AI-powered hiring platforms</div>
+                            <div class="option-description">Automated candidate matching and screening tools</div>
+                        </div>
+                    </div>
+
+                    <div class="navigation">
+                        <div></div>
+                        <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn" disabled>
+                            Next Question →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question-container" data-question="2">
+                    <div class="question-number">Question 2 of 8</div>
+                    <h2 class="question-text">How many applications do you typically receive per position?</h2>
+                    <p class="question-description">Higher volumes often mean more automated screening</p>
+                    
+                    <div class="options">
+                        <div class="option" data-value="1" data-answer="few">
+                            <div class="option-text">1-10 applications</div>
+                            <div class="option-description">Small, targeted candidate pool</div>
+                        </div>
+                        <div class="option" data-value="2" data-answer="moderate">
+                            <div class="option-text">11-50 applications</div>
+                            <div class="option-description">Manageable volume for personal review</div>
+                        </div>
+                        <div class="option" data-value="3" data-answer="many">
+                            <div class="option-text">51-200 applications</div>
+                            <div class="option-description">Requires some filtering to manage</div>
+                        </div>
+                        <div class="option" data-value="4" data-answer="flood">
+                            <div class="option-text">200+ applications</div>
+                            <div class="option-description">Overwhelming volume, definitely need automation</div>
+                        </div>
+                    </div>
+
+                    <div class="navigation">
+                        <button class="btn btn-secondary" onclick="prevQuestion()">← Previous</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn2" disabled>
+                            Next Question →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question-container" data-question="3">
+                    <div class="question-number">Question 3 of 8</div>
+                    <h2 class="question-text">How do you screen initial candidates?</h2>
+                    <p class="question-description">Your first filter can make or break candidate quality</p>
+                    
+                    <div class="options">
+                        <div class="option" data-value="4" data-answer="ai-screen">
+                            <div class="option-text">AI-powered resume screening</div>
+                            <div class="option-description">Algorithm sorts candidates by keywords and scores</div>
+                        </div>
+                        <div class="option" data-value="3" data-answer="quick-scan">
+                            <div class="option-text">Quick resume scan for basic requirements</div>
+                            <div class="option-description">30-second review focusing on key qualifications</div>
+                        </div>
+                        <div class="option" data-value="2" data-answer="detailed-review">
+                            <div class="option-text">Detailed resume review and cover letter reading</div>
+                            <div class="option-description">Thorough examination of each application</div>
+                        </div>
+                        <div class="option" data-value="1" data-answer="phone-first">
+                            <div class="option-text">Brief phone conversation with most candidates</div>
+                            <div class="option-description">Personal contact before making decisions</div>
+                        </div>
+                    </div>
+
+                    <div class="navigation">
+                        <button class="btn btn-secondary" onclick="prevQuestion()">← Previous</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn3" disabled>
+                            Next Question →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question-container" data-question="4">
+                    <div class="question-number">Question 4 of 8</div>
+                    <h2 class="question-text">What's your biggest hiring challenge?</h2>
+                    <p class="question-description">This reveals where automation might be failing you</p>
+                    
+                    <div class="options">
+                        <div class="option" data-value="3" data-answer="volume">
+                            <div class="option-text">Too many unqualified applications</div>
+                            <div class="option-description">Flooded with candidates who don't meet basic requirements</div>
+                        </div>
+                        <div class="option" data-value="4" data-answer="fit">
+                            <div class="option-text">Candidates look good on paper but aren't the right fit</div>
+                            <div class="option-description">Skills match but personality/culture doesn't work</div>
+                        </div>
+                        <div class="option" data-value="2" data-answer="time">
+                            <div class="option-text">Process takes too long</div>
+                            <div class="option-description">Multiple rounds of interviews and delays</div>
+                        </div>
+                        <div class="option" data-value="3" data-answer="quality">
+                            <div class="option-text">Can't find candidates with the right experience</div>
+                            <div class="option-description">Specific skills or industry knowledge lacking</div>
+                        </div>
+                    </div>
+
+                    <div class="navigation">
+                        <button class="btn btn-secondary" onclick="prevQuestion()">← Previous</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn4" disabled>
+                            Next Question →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question-container" data-question="5">
+                    <div class="question-number">Question 5 of 8</div>
+                    <h2 class="question-text">How do you assess cultural fit?</h2>
+                    <p class="question-description">Cultural fit often determines long-term success</p>
+                    
+                    <div class="options">
+                        <div class="option" data-value="4" data-answer="no-assessment">
+                            <div class="option-text">We don't specifically assess cultural fit</div>
+                            <div class="option-description">Focus mainly on skills and experience</div>
+                        </div>
+                        <div class="option" data-value="3" data-answer="questions">
+                            <div class="option-text">Ask a few culture-related questions in interviews</div>
+                            <div class="option-description">Standard questions about work style preferences</div>
+                        </div>
+                        <div class="option" data-value="2" data-answer="team-meet">
+                            <div class="option-text">Have candidates meet the team</div>
+                            <div class="option-description">Informal conversations with potential colleagues</div>
+                        </div>
+                        <div class="option" data-value="1" data-answer="deep-dive">
+                            <div class="option-text">Extensive conversations about values and work style</div>
+                            <div class="option-description">Multiple touchpoints to understand personality fit</div>
+                        </div>
+                    </div>
+
+                    <div class="navigation">
+                        <button class="btn btn-secondary" onclick="prevQuestion()">← Previous</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn5" disabled>
+                            Next Question →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="question-container" data-question="6">
+                    <div class="question-number">Question 6 of 8</div>
+                    <h2 class="question-text">How often do new hires not work out as expected?</h2>
+                    <p class="question-description">Mis-hires are often a sign of process problems</p>
+                    
+                    <div class="options">
+                        <div class="option" data-value="1" data-answer="rarely">
+                            <div class="option-text">Rarely - most hires work out well</div>
+                            <div class="option-description">Less than 10% turnover in first 6 months</div>
+                        </div>
+                        <div class="option" data-value="2" data-answer="sometimes">
+                            <div class="option-text">Sometimes - occasional mis-hire</div>
+                            <div class="option-description">10-25% don't meet expectations</div>
+                        </div>
+                        <div class="option" data-value="3" data-answer="often">
+                            <div class="option-text">Often - significant portion don't work out</div>
+                            <div class="option-description">25-50% need replacement within 6 months</div>
+                        </div>
+                        <div class="option" data-value="4" data-answer="frequently">
+                            <div class="option-text">Frequently - hiring feels like a gamble</div>
+                            <div class="option-description">Over 50% turnover or performance issues</div>
+                        </div>
+                    </div>
+
+                    <div class="navigation">
+                        <button class="btn btn-secondary" onclick="prevQuestion()">← Previous</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn6" disabled>
+                            Next Question →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="question-container" data-question="7">
+                    <div class="question-number">Question 7 of 8</div>
+                    <h2 class="question-text">How much time do you spend personally talking to candidates?</h2>
+                    <p class="question-description">Personal interaction reveals what resumes can't</p>
+                    
+                    <div class="options">
+                        <div class="option" data-value="4" data-answer="minimal">
+                            <div class="option-text">Minimal - mostly rely on written applications</div>
+                            <div class="option-description">Brief final interview only</div>
+                        </div>
+                        <div class="option" data-value="3" data-answer="standard">
+                            <div class="option-text">Standard interview process</div>
+                            <div class="option-description">1-2 formal interviews per candidate</div>
+                        </div>
+                        <div class="option" data-value="2" data-answer="multiple">
+                            <div class="option-text">Multiple conversations with top candidates</div>
+                            <div class="option-description">Several touchpoints to get to know them</div>
+                        </div>
+                        <div class="option" data-value="1" data-answer="extensive">
+                            <div class="option-text">Extensive conversations with most viable candidates</div>
+                            <div class="option-description">Really get to know people before deciding</div>
+                        </div>
+                    </div>
+
+                    <div class="navigation">
+                        <button class="btn btn-secondary" onclick="prevQuestion()">← Previous</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn7" disabled>
+                            Next Question →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 8 -->
+                <div class="question-container" data-question="8">
+                    <div class="question-number">Question 8 of 8</div>
+                    <h2 class="question-text">What would most improve your hiring success?</h2>
+                    <p class="question-description">This reveals your biggest opportunity area</p>
+                    
+                    <div class="options">
+                        <div class="option" data-value="3" data-answer="better-filtering">
+                            <div class="option-text">Better filtering to reduce unqualified candidates</div>
+                            <div class="option-description">More efficient screening process</div>
+                        </div>
+                        <div class="option" data-value="1" data-answer="understanding">
+                            <div class="option-text">Someone who understands my business needs first</div>
+                            <div class="option-description">Recruitment that starts with business context</div>
+                        </div>
+                        <div class="option" data-value="2" data-answer="pre-screening">
+                            <div class="option-text">Better pre-screening of candidate personalities</div>
+                            <div class="option-description">Cultural fit assessment before interviews</div>
+                        </div>
+                        <div class="option" data-value="1" data-answer="relationship">
+                            <div class="option-text">More personal relationship-building with candidates</div>
+                            <div class="option-description">Getting to know people as individuals</div>
+                        </div>
+                    </div>
+
+                    <div class="navigation">
+                        <button class="btn btn-secondary" onclick="prevQuestion()">← Previous</button>
+                        <button class="btn btn-primary" onclick="showResults()" id="nextBtn8" disabled>
+                            See My Results →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="results-container" id="resultsSection">
+                    <div class="results-header">
+                        <div class="results-score" id="scoreDisplay"></div>
+                        <div class="results-title" id="resultTitle"></div>
+                        <div class="results-description" id="resultDescription"></div>
+                    </div>
+
+                    <div class="results-details">
+                        <div id="recommendationsList"></div>
+                    </div>
+
+                    <div class="cta-section">
+                        <h3 class="cta-title">Access The Business Owner's Guide to Recruitment Services</h3>
+                        <p class="cta-text">
+                            Based on your results, we'll send you our comprehensive guide that reveals the different types of recruitment services available and how to choose the right approach for your business.
+                        </p>
+                        <div class="email-form">
+                            <input type="email" class="email-input" placeholder="Enter your email for the free guide" id="emailInput">
+                            <button class="btn btn-primary" onclick="submitEmail()">Get Free Guide</button>
+                        </div>
+                        <div class="features-list">
+                            ✓ Complete recruitment service overview ✓ Pros & cons of each approach ✓ Selection framework included
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script src="script.js"></script>
     <script src="integrations/analytics.js"></script>
     <script src="integrations/gohighlevel.js"></script>
 </body>
-</html> 
+</html>
